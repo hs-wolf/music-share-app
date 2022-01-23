@@ -1,21 +1,43 @@
 <script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import HelloWorld from './components/HelloWorld.vue'
+import { onMounted } from "vue";
+import AppNavbar from "@/components/Navbar.vue";
+import AppContainer from "@/components/Container.vue";
+import AppAuthModal from "@/components/AuthModal.vue";
+import { useAuthStore } from "./store/authStore";
+
+const authStore = useAuthStore();
+
+onMounted(() => {
+  authStore.initLogin();
+});
 </script>
 
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
+  <div
+    class="min-h-screen flex flex-col theme-main transition-colors duration-250 ease-in-out"
+  >
+    <app-navbar />
+    <app-container>
+      <router-view v-slot="{ Component }">
+        <transition
+          enter-active-class="animate__animated animate__fadeInRight animate__faster"
+          leave-active-class="animate__animated animate__fadeOutLeft animate__faster"
+          mode="out-in"
+        >
+          <component :is="Component" />
+        </transition>
+      </router-view>
+    </app-container>
+  </div>
+  <app-auth-modal />
 </template>
 
 <style>
+@import url(https://fonts.googleapis.com/css?family=Roboto);
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
